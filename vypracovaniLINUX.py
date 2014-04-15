@@ -7,9 +7,9 @@ import skimage.morphology
 import numpy
 import scipy.ndimage
 
-class SkupinaX:
+class Znacky:
     """
-    M. Cerveny
+    skupina jmenem cervenym
 
     """
     def __init__(self):
