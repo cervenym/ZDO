@@ -42,8 +42,8 @@ class Znacky:
         #cesta ke skriptu
         path_to_script = os.path.dirname(os.path.abspath(__file__))
         # spojeni s relativni cestou
-        classifier_path = os.path.join(path_to_script, "../OBRcely.txt")
-        self.tridy,self.etalony = nactiTridyEtalonyZeSouboru('OBRcely.txt')
+        classifier_path = os.path.join(path_to_script, "OBRcely.txt")
+        self.tridy,self.etalony = nactiTridyEtalonyZeSouboru(classifier_path)
         pass
         
     
