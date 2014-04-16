@@ -6,6 +6,7 @@ import cv2
 import skimage.morphology
 import numpy
 import scipy.ndimage
+import os
 
 class Znacky:
     """
@@ -38,7 +39,10 @@ class Znacky:
             #print tridy
             #print etalony
             return tridy,etalony
-        
+        #cesta ke skriptu
+        path_to_script = os.path.dirname(os.path.abspath(__file__))
+        # spojeni s relativni cestou
+        classifier_path = os.path.join(path_to_script, "../OBRcely.txt")
         self.tridy,self.etalony = nactiTridyEtalonyZeSouboru('OBRcely.txt')
         pass
         
@@ -252,4 +256,3 @@ class Znacky:
         return retval
             
 '''KONEC CLASS Znacky'''
-
