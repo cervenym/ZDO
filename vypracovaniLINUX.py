@@ -16,11 +16,12 @@ class Znacky:
     """
     def __init__(self):
         
-        def nactiTridyEtalonyPickle(self,nazev):
+        def nactiTridyEtalonyPickle(nazev):
             pole = pickle.load( open( nazev, "rb" ) )
             tridy = pole[0]
             etalony = pole[1]
             return tridy,etalony
+        
         #cesta ke skriptu
         path_to_script = os.path.dirname(os.path.abspath(__file__))
         # spojeni s relativni cestou
