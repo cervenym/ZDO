@@ -7,6 +7,7 @@ import skimage.morphology
 import numpy
 import scipy.ndimage
 import os
+import pickle
 
 class Znacky:
     """
@@ -15,35 +16,16 @@ class Znacky:
     """
     def __init__(self):
         
-        def nactiTridyEtalonyZeSouboru(nazev):
-            soubor = open(nazev,'r')
-            tridy = []
-            etalony = []
-            radky = soubor.readlines()
-            #print radky
-            counter = 1
-            for radek in radky:
-                radek = radek.strip()
-                if(counter % 2 == 1): #radek je trida
-                    tridy.append(radek)
-                else:                 #radek je etalon
-                    radek = radek.strip()
-                    radek = radek.split()
-                    policko = []
-                    for x in radek:
-                        h = float(x)
-                        policko.append(h)
-                        
-                    etalony.append(policko)
-                counter = counter+1
-            #print tridy
-            #print etalony
+        def nactiTridyEtalonyPickle(self,nazev):
+            pole = pickle.load( open( nazev, "rb" ) )
+            tridy = pole[0]
+            etalony = pole[1]
             return tridy,etalony
         #cesta ke skriptu
         path_to_script = os.path.dirname(os.path.abspath(__file__))
         # spojeni s relativni cestou
-        classifier_path = os.path.join(path_to_script, "OBRcely.txt")
-        self.tridy,self.etalony = nactiTridyEtalonyZeSouboru(classifier_path)
+        classifier_path = os.path.join(path_to_script, "OBRpickle.p")
+        self.tridy,self.etalony = nactiTridyEtalonyPickle(classifier_path)
         pass
         
     
@@ -193,29 +175,10 @@ class Znacky:
         #vektor = Xcervena + Xmodra + Xzluta + Xbila + Xzelena + Xhrany+  Ycervena + Ymodra + Yzluta + Ybila + Yzelena + Yhrany
         return vektor
     
-    def nactiTridyEtalonyZeSouboru(self,nazev):
-        soubor = open(nazev,'r')
-        tridy = []
-        etalony = []
-        radky = soubor.readlines()
-        #print radky
-        counter = 1
-        for radek in radky:
-            radek = radek.strip()
-            if(counter % 2 == 1): #radek je trida
-                tridy.append(radek)
-            else:                 #radek je etalon
-                radek = radek.strip()
-                radek = radek.split()
-                policko = []
-                for x in radek:
-                    h = float(x)
-                    policko.append(h)
-                    
-                etalony.append(policko)
-            counter = counter+1
-        #print tridy
-        #print etalony
+    def nactiTridyEtalonyPickle(self,nazev):
+        pole = pickle.load( open( nazev, "rb" ) )
+        tridy = pole[0]
+        etalony = pole[1]
         return tridy,etalony
     
     def vyberMinPole(self,pole):
