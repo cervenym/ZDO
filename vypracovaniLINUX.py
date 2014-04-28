@@ -140,7 +140,8 @@ class Znacky:
     
     def udelejObraz(self,jabko):
         #print nazev
-        #jabko= cv2.imread(nazev, cv2.CV_LOAD_IMAGE_COLOR)
+        jabko= cv2.imread(jabko, cv2.CV_LOAD_IMAGE_COLOR)
+        #print jabko
         x = cv2.resize(jabko,(100,100)  ,interpolation=cv2.INTER_LINEAR) #NORMALIZACE
         filtrovanejabko = cv2.GaussianBlur(x,(5,5), 5) #GAUSSOVSKA FILTRACE
         prebarveny = cv2.cvtColor(filtrovanejabko,cv2.COLOR_BGR2HSV) #PREVEDENI NA HSV
