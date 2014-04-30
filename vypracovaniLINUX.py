@@ -138,11 +138,9 @@ class Znacky:
         TF = cv2.GaussianBlur(TF,(5,5), 5) #GAUSSOVSKA FILTRACE PODRUHE
         return TF
     
-    def udelejObraz(self,jabko):
-        #print nazev
-        jabko= cv2.imread(jabko, cv2.CV_LOAD_IMAGE_COLOR)
-        #print jabko
-        x = cv2.resize(jabko,(100,100)  ,interpolation=cv2.INTER_LINEAR) #NORMALIZACE
+    def udelejObraz(self,img):
+        imgNEW = cv2.cvtColor(img,cv2.COLOR_RGB2BGR)
+        x = cv2.resize(imgNEW,(100,100)  ,interpolation=cv2.INTER_LINEAR) #NORMALIZACE
         filtrovanejabko = cv2.GaussianBlur(x,(5,5), 5) #GAUSSOVSKA FILTRACE
         prebarveny = cv2.cvtColor(filtrovanejabko,cv2.COLOR_BGR2HSV) #PREVEDENI NA HSV
         cernobily = cv2.cvtColor(filtrovanejabko,cv2.COLOR_BGR2GRAY) #PREVEDENI NA HSV    
