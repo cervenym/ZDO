@@ -189,10 +189,14 @@ def dejVzdalenost(seznam1,seznam2):
     return cislo
 
 jabko= cv2.imread('demoZnacka.jpg', cv2.CV_LOAD_IMAGE_COLOR)
+vektor = udelejObraz('demoZnacka.jpg')
 #jabko= cv2.imread('aha.jpg', cv2.CV_LOAD_IMAGE_COLOR)
 start = time.time()
 jabkoRGB = cv2.cvtColor(jabko,cv2.COLOR_BGR2RGB)
 
+
+print"========"
+print"puvodni obrazek"
 
 plt.imshow(jabkoRGB)
 delkax = len(jabkoRGB[0,:])
@@ -200,16 +204,22 @@ delkay =  len(jabkoRGB[:,0])
 plt.title('puvodni obrazek ' + str(delkax) + ":" + str(delkay))
 plt.show()
 
+
 x = cv2.resize(jabko,(100,100)  ,interpolation=cv2.INTER_LINEAR) #NORMALIZACE BILINEARNI TRANSFORMACE
 filtrovanejabko = cv2.GaussianBlur(x,(5,5), 5) #GAUSSOVSKA FILTRACE
 
 y = cv2.resize(jabkoRGB,(100,100)  ,interpolation=cv2.INTER_LINEAR) # V RGB MISTO BGR ABY TO BYLO HEZKY VIDET
 jy = cv2.GaussianBlur(y,(5,5), 5) 
 
+maska = cv2.getGaussianKernel(5,5)
+print"========"
+print"Obrazek po normalizaci na velikost 100:100 pixelu a gaussovske filtraci nasledujicim jadrem:"
+print maska
 
 plt.title('obrazek po zmene velikosti a gaussovske filtraci 100:100')
 plt.imshow(jy)
 plt.show()
+
 
 prebarveny = cv2.cvtColor(filtrovanejabko,cv2.COLOR_BGR2HSV) #PREVEDENI NA HSV
 cernobily = cv2.cvtColor(filtrovanejabko,cv2.COLOR_BGR2GRAY) #PREVEDENI NA HSV
@@ -218,6 +228,8 @@ huehue =  prebarveny[:,:,0]
 saturace = prebarveny[:,:,1] 
 value = prebarveny[:,:,2] 
 
+print"========"
+print"Obrazek po prevedeni na barevny model HSV"
 
 a = plt.figure(figsize = (9,4))
 plt.subplot(111)
@@ -254,9 +266,16 @@ kernel_big = skimage.morphology.diamond(1)
 TF = skimage.morphology.binary_opening(TF, kernel_big) # OTEVRENI
 TF = cv2.GaussianBlur(TF,(5,5), 5) #GAUSSOVSKA FILTRACE PODRUHE
 
-print "ukazka masky pro cervenou:"
+#print "ukazka masky pro cervenou:"
+#print kernel_big
+#print
+
+print"========"
+print"Ukazka vybrani barevnych slozek z obrazu, v tomto pripade:"
+print"cervena = ruda (hue 160-179)+oranzova (hue <22 and saturace >90):"
+print "na soucet je pote jeste aplikovano binarni otevreni nasledujicim jadrem:"
 print kernel_big
-print
+print "a gaussovska filtrace stejnym jadrem jako uz bylo pouzito"
 
 a = plt.figure(figsize = (9,3))
 plt.suptitle('vybrani cervene')
@@ -267,12 +286,14 @@ plt.subplot(132)
 plt.imshow(oranzova,plt.gray())
 plt.title('oranzova')
 plt.subplot(133)
-plt.imshow(jy,plt.gray())
-plt.title('filtrovany')
+plt.imshow(TF,plt.gray())
+plt.title(' otevrena a filtrovana cervena')
 plt.show()
 
-
-
+print"========"
+print"Ukazka Ferretovych prumetu pro cervenou slozku. Z techto prumetu je posleze"
+print"sestaven obrazovy vektor dane znacky. "
+print"Jelikoz je obrazek normalizovany na velikost 100:100 ma kazdy prumet 100 hodnot, dohromady ma kazda slozka 200 hodnot "
 
 figurka = plt.figure(figsize = (9,9))
 plt.suptitle('cervena = ruda+oranzova')
@@ -287,7 +308,8 @@ ax.plot(prumetX(TFcervena))
 plt.title('prumet osy X')
 plt.show()
 ukazka = prumetX(TFcervena)
-print "Ukazka prvnich deseti hodnot obrazu: " + str(ukazka[1:10])
+
+#print "Ukazka prvnich deseti hodnot obrazu: " + str(ukazka[1:10])
 
 Xcervena = prumetX(TFcervena)
 Ycervena = prumetY(TFcervena)
@@ -304,8 +326,11 @@ Yhrany = prumetY(TFhrany)
 Xsymbol = prumetX(TFsymbol)
 Ysymbol = prumetY(TFsymbol)  
 
-
-
+print"========"
+print"Vsechny slozky obrazu"
+print"Kazda slozka ma 200 hodnot, slozek je 7, celkova delka vektoru priznaku = 1400."
+print vektor
+print len(vektor)
 
 b = plt.figure(figsize = (13,2))
 plt.suptitle('Ukazka vsech barevnych slozek')
@@ -335,3 +360,16 @@ plt.imshow(jabkoRGB)
 plt.title('puvodni')
 plt.show()
 
+print"========"
+print"Slozky jsou vicemene vybrany podobne jako cervena, jen s jinymi parametry. Vyjimky tvori slozky hrany a symbol"
+print"hrany:"
+print"Jsou ziskany pomoci Cannyho hranoveho detektoru a je na ne misto otevreni aplikovana pouze dilatace"
+print"symbol:"
+print"Jedna se o bilou slozku uvnitr cerveneho uzavreneho utvaru, ziskano logickymi operacemi za pomoci vyplneni der"
+print"u slozky cervena. Oduvodneni je zlepseni klasifikace znacek lisicich se pouze cernym symbolem, pro necervene znacky "
+print"je nulova "
+
+print"========"
+print"Pouzity klasifikator:"
+print"Nejblizsi soused, vlastni implementace. Z cele tridy se vypocte prumer tez vzor tridy, "
+print"a neznamemu obrazu je prirazena trida, k jejimuz vzoru ma nejmensi eukleidovskou vzdalenost.  "
